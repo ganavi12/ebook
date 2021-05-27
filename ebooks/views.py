@@ -3,17 +3,25 @@ from rest_framework import mixins, generics
 from .models import Ebook, Review
 from .serializers import EbookSerializer, ReviewSerializer
 from rest_framework.generics import get_object_or_404
+from rest_framework import permissions
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions, IsAdminUser, DjangoObjectPermissions
+
 
 # Create your views here.
 
 #  USING CONCRETE API VIEW CLASS
 class EbookListCreateAPIView(generics.ListCreateAPIView):
+    # authentication_classes = [TokenAuthentication, ]
+    # permission_classes = [IsAuthenticated,]
     queryset  = Ebook.objects.all()
     serializer_class = EbookSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class EbookDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset  = Ebook.objects.all()
     serializer_class = EbookSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class ReviewCreateAPIView(generics.CreateAPIView):
     queryset = Review.objects.all()
